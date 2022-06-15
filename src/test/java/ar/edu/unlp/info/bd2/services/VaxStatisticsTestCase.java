@@ -1,8 +1,7 @@
 package ar.edu.unlp.info.bd2.services;
 
-import ar.edu.unlp.info.bd2.config.AppConfig;
 import ar.edu.unlp.info.bd2.config.DBInitializerConfig;
-import ar.edu.unlp.info.bd2.config.HibernateConfiguration;
+import ar.edu.unlp.info.bd2.config.SpringDataConfiguration;
 import ar.edu.unlp.info.bd2.utils.DBInitializer;
 import ar.edu.unlp.info.bd2.model.*;
 import org.junit.Assert;
@@ -11,6 +10,7 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.test.annotation.Rollback;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
@@ -25,10 +25,12 @@ import java.util.stream.Collectors;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-@ExtendWith(SpringExtension.class)
-@ContextConfiguration(classes = {AppConfig.class, HibernateConfiguration.class, DBInitializerConfig.class }, loader = AnnotationConfigContextLoader.class)
 @Transactional
 @Rollback(true)
+@ExtendWith(SpringExtension.class)
+@ContextConfiguration(
+        classes = {SpringDataConfiguration.class},
+        loader = AnnotationConfigContextLoader.class)
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 
 public class VaxStatisticsTestCase {
@@ -36,6 +38,7 @@ public class VaxStatisticsTestCase {
     DBInitializer initializer;
 
     @Autowired
+    @Qualifier("springDataJpaService")
     VaxService service;
 
     SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
